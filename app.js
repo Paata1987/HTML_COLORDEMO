@@ -13,10 +13,12 @@ function randomRGBColorGenerator() {
 function setRandomColors() {}
 columns.forEach((el) => {
   const text = el.querySelector('h2');
+  const button = el.querySelector('button');
   const color = chroma.random();
   Text.textContent = color;
   el.style.background = color;
   setTextColor(text, color);
+  setTextColor(button, color);
 });
 setRandomColors();
 

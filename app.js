@@ -20,6 +20,8 @@ document.addEventListener('click', (event) => {
     console.log('perform-lock');
     node.classList.toggle('fa-lock-open');
     node.classList.toggle('fa-lock');
+  } else if (type === 'copy') {
+    copyToColorOnClick(event.target.textContent);
   }
 });
 
@@ -31,6 +33,10 @@ function randomRGBColorGenerator() {
       rgbHexColorCodes[Math.floor(Math.random() * rgbHexColorCodes.length)];
   }
   return '#' + singleColor;
+}
+
+function copyToColorOnClick(text) {
+  return navigator.clipboard.writeText(text);
 }
 
 function setRandomColors() {

@@ -1,6 +1,7 @@
 const columns = document.querySelectorAll('.col');
 
 document.addEventListener('keydown', (event) => {
+  event.preventDefault();
   let tabCode = event.code.toLowerCase();
   console.log(tabCode);
   if (tabCode == 'space') {
@@ -12,7 +13,13 @@ document.addEventListener('click', (event) => {
   const type = event.target.dataset.type;
 
   if (type === 'lock') {
+    const node =
+      event.target.tagName.toLowerCase() === 'i'
+        ? event.target
+        : event.target.children[0];
     console.log('perform-lock');
+    node.classList.toggle('fa-lock-open');
+    node.classList.toggle('fa-lock');
   }
 });
 
@@ -28,11 +35,16 @@ function randomRGBColorGenerator() {
 
 function setRandomColors() {
   columns.forEach((el) => {
+    const isLocked = el.querySelector('i').classList.contains('fa-lock');
     const text = el.querySelector('h2');
     const button = el.querySelector('button');
     const color = chroma.random();
 
-    Text.textContent = color;
+    if (isLocked) {
+      return;
+    }
+
+    text.textContent = color;
     el.style.background = color;
     setTextColor(text, color);
     setTextColor(button, color);

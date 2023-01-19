@@ -8,6 +8,14 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+document.addEventListener('click', (event) => {
+  const type = event.target.dataset.type;
+
+  if (type === 'lock') {
+    console.log('perform-lock');
+  }
+});
+
 function randomRGBColorGenerator() {
   const rgbHexColorCodes = '0123456789ABCDEF';
   let singleColor = '';

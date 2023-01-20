@@ -3,7 +3,7 @@ const columns = document.querySelectorAll('.col');
 document.addEventListener('keydown', (event) => {
   event.preventDefault();
   let tabCode = event.code.toLowerCase();
-  console.log(tabCode);
+
   if (tabCode == 'space') {
     setRandomColors();
   }
@@ -17,7 +17,7 @@ document.addEventListener('click', (event) => {
       event.target.tagName.toLowerCase() === 'i'
         ? event.target
         : event.target.children[0];
-    console.log('perform-lock');
+
     node.classList.toggle('fa-lock-open');
     node.classList.toggle('fa-lock');
   } else if (type === 'copy') {
@@ -39,22 +39,33 @@ function copyToColorOnClick(text) {
   return navigator.clipboard.writeText(text);
 }
 
-function setRandomColors() {
-  columns.forEach((el) => {
+function setRandomColors(isInitial) {
+  const someColors = isInitial ? generateColorsFromHash() : [];
+
+  columns.forEach((el, index) => {
     const isLocked = el.querySelector('i').classList.contains('fa-lock');
     const text = el.querySelector('h2');
     const button = el.querySelector('button');
-    const color = chroma.random();
+    chroma.random();
 
     if (isLocked) {
+      someColors.push(text.textContent);
       return;
     }
 
+    const color = isInitial
+      ? someColors[index]
+        ? someColors[index]
+        : chroma.random()
+      : chroma.random();
+
+    someColors.push(color);
     text.textContent = color;
     el.style.background = color;
     setTextColor(text, color);
     setTextColor(button, color);
   });
+  colorHashUpdate(someColors);
 }
 setRandomColors();
 
@@ -63,4 +74,22 @@ function setTextColor(text, color) {
   text.style.color = luminance > 0.5 ? 'black' : 'white';
 }
 
-setRandomColors();
+colorsArray = [];
+function colorHashUpdate(colorsArray) {
+  document.location.hash = colorsArray
+    .map((e) => e.toString().substring(1))
+    .join('-');
+}
+
+function generateColorsFromHash() {
+  const generateHashVar = document.location.hash;
+  if (generateHashVar.length > 1) {
+    return generateHashVar
+      .substring(1)
+      .split('-')
+      .map((color) => '#' + color);
+  }
+  return [];
+}
+
+setRandomColors(true);
